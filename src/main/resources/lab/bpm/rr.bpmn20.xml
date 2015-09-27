@@ -4,7 +4,7 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              targetNamespace="http://activiti.org/bpmn20">
 
-  <process id="icoi"  isExecutable="true" name="ICOI Review Process">
+  <process id="R_R"  isExecutable="true" name="Return-Review-Activate-Deactivate Process">
 
       <startEvent id="theStart" name="StartEvent"/>
 
@@ -49,7 +49,7 @@
       <userTask id="deactivate" name="Deactivate"/>
       <boundaryEvent id="autoDeactivate" cancelActivity="true" attachedToRef="deactivate">
           <timerEventDefinition>
-              <timeDuration>PT1S</timeDuration>
+              <timeDuration>PT3S</timeDuration>
           </timerEventDefinition>
       </boundaryEvent>
 

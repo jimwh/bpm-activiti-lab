@@ -37,62 +37,71 @@ public class MyTest {
 
     @Test
     public void test() {
+        String procDefKey = "R_R";
+
+        testReturn(procDefKey, "testReturn");
+
+        testDeactivate(procDefKey, "testDeactivate");
+
+        testAutoDeactivate();
+    }
+
+    void testAutoDeactivate() {
+        String processDefKey = "R_R";
         String bizKey = "testAutoDeactivate-bizKey";
-        testAutoDeactivate(bizKey);
+        testAutoDeactivate(processDefKey, bizKey);
         try {
             Thread.sleep(8000);
         } catch (InterruptedException e) {
         }
         log.info("after timer fired open task count: {}", taskCount(bizKey));
         printHistory(bizKey);
-
     }
 
-    public void testAutoDeactivate(String bizKey) {
-        String ProcessDefKey = "icoi";
-        ProcessInstance instance = runtimeService.startProcessInstanceByKey(ProcessDefKey, bizKey);
+    private void testAutoDeactivate(String processDefKey, String bizKey) {
+        ProcessInstance instance = runtimeService.startProcessInstanceByKey(processDefKey, bizKey);
         Assert.assertNotNull(instance);
+        Assert.assertEquals(1, taskCount(bizKey));
 
-        log.info("open task count: {}", taskCount(bizKey));
         completeTask(bizKey, "submit");
-        log.info("open task count: {}", taskCount(bizKey));
+        Assert.assertEquals(2, taskCount(bizKey));
+
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("RETURN", Boolean.FALSE);
         completeTask(bizKey, "activate", map);
-        log.info("open task count: {}", taskCount(bizKey));
-
+        Assert.assertEquals(1, taskCount(bizKey));
     }
 
-    public void testDeactivate() {
-        String ProcessDefKey = "icoi";
-        String bizKey = "testDeactivate-bizKey";
-        ProcessInstance instance = runtimeService.startProcessInstanceByKey(ProcessDefKey, bizKey);
-        Assert.assertNotNull(instance);
+    void testDeactivate(String procDefKey, String bizKey) {
 
-        log.info("open task count: {}", taskCount(bizKey));
+        ProcessInstance instance = runtimeService.startProcessInstanceByKey(procDefKey, bizKey);
+        Assert.assertNotNull(instance);
+        Assert.assertEquals(1, taskCount(bizKey));
+
         completeTask(bizKey, "submit");
-        log.info("open task count: {}", taskCount(bizKey));
+        Assert.assertEquals(2, taskCount(bizKey));
+
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("RETURN", Boolean.FALSE);
         completeTask(bizKey, "activate", map);
-        log.info("open task count: {}", taskCount(bizKey));
+        Assert.assertEquals(1, taskCount(bizKey));
+
         completeTask(bizKey, "deactivate");
-        log.info("open task count: {}", taskCount(bizKey));
+        Assert.assertEquals(0, taskCount(bizKey));
     }
 
-    public void testReturn() {
-        String ProcessDefKey = "icoi";
-        String bizKey = "testReturn-bizKey";
-        ProcessInstance instance = runtimeService.startProcessInstanceByKey(ProcessDefKey, bizKey);
+    void testReturn(String procDefKey, String bizKey) {
+        ProcessInstance instance = runtimeService.startProcessInstanceByKey(procDefKey, bizKey);
         Assert.assertNotNull(instance);
+        Assert.assertEquals(1, taskCount(bizKey));
 
-        log.info("open task count: {}", taskCount(bizKey));
         completeTask(bizKey, "submit");
-        log.info("open task count: {}", taskCount(bizKey));
+        Assert.assertEquals(2, taskCount(bizKey));
+
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("RETURN", Boolean.TRUE);
         completeTask(bizKey, "return", map);
-        log.info("open task count: {}", taskCount(bizKey));
+        Assert.assertEquals(0, taskCount(bizKey));
     }
 
     void completeTask(String bizKey, String taskDefKey) {
@@ -125,8 +134,8 @@ public class MyTest {
                 .processInstanceBusinessKey(bizKey)
                 .active()
                 .list();
-        for(Task task: list) {
-            log.info("key={}",task.getTaskDefinitionKey());
+        for (Task task : list) {
+            log.info("key={}", task.getTaskDefinitionKey());
         }
     }
 
@@ -134,8 +143,8 @@ public class MyTest {
         List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery()
                 .processInstanceBusinessKey(bizKey)
                 .list();
-        for(HistoricTaskInstance ht: list) {
-            log.info("key={}, name={}, delReasone={}", ht.getTaskDefinitionKey(), ht.getName(), ht.getDeleteReason());
+        for (HistoricTaskInstance ht : list) {
+            log.info("key={}, name={}, delReason={}", ht.getTaskDefinitionKey(), ht.getName(), ht.getDeleteReason());
         }
     }
 }
