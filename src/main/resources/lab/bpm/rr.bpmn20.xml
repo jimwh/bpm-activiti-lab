@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="http://activiti.org/bpmn20">
+
+  <process id="icoi"  isExecutable="true" name="ICOI Review Process">
+
+      <startEvent id="theStart" name="StartEvent"/>
+
+      <userTask id="submit" name="Submit"/>
+
+      <transaction id="review_zone">
+          <userTask id="return" name="Return"/>
+          <userTask id="activate" name="Activate"/>
+
+          <startEvent id="review_zone_start"/>
+          <parallelGateway id="fork"/>
+          <sequenceFlow sourceRef="review_zone_start" targetRef="fork"/>
+          <sequenceFlow sourceRef="fork" targetRef="return"/>
+          <sequenceFlow sourceRef="fork" targetRef="activate"/>
+          <exclusiveGateway id="join"/>
+          <sequenceFlow sourceRef="return" targetRef="join"/>
+          <sequenceFlow sourceRef="activate" targetRef="join"/>
+          <endEvent id="review_zone_end">
+              <cancelEventDefinition/>
+          </endEvent>
+          <sequenceFlow sourceRef="join" targetRef="review_zone_end"/>
+      </transaction>
+      <boundaryEvent id="review_zone_cancelled" attachedToRef="review_zone">
+          <cancelEventDefinition/>
+      </boundaryEvent>
+
+      <sequenceFlow sourceRef="theStart" targetRef="submit" />
+      <sequenceFlow sourceRef="submit" targetRef="review_zone" />
+      <sequenceFlow sourceRef="review_zone" targetRef="zone_out" />
+      <exclusiveGateway id="zone_out"/>
+
+      <endEvent id="theEnd" name="EndEvent"/>
+
+      <sequenceFlow sourceRef="zone_out" targetRef="theEnd">
+          <conditionExpression xsi:type="tFormalExpression">${RETURN}</conditionExpression>
+      </sequenceFlow>
+
+      <sequenceFlow sourceRef="zone_out" targetRef="deactivate">
+          <conditionExpression xsi:type="tFormalExpression">${!RETURN}</conditionExpression>
+      </sequenceFlow>
+
+      <userTask id="deactivate" name="Deactivate"/>
+      <boundaryEvent id="autoDeactivate" cancelActivity="true" attachedToRef="deactivate">
+          <timerEventDefinition>
+              <timeDuration>PT1S</timeDuration>
+          </timerEventDefinition>
+      </boundaryEvent>
+
+      <sequenceFlow sourceRef="deactivate" targetRef="theEnd" />
+      <sequenceFlow sourceRef="autoDeactivate" targetRef="theEnd" />
+
+  </process>
+</definitions>
