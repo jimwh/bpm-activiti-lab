@@ -64,4 +64,7 @@
     <bean id="identityService" factory-bean="processEngine"
           factory-method="getIdentityService"/>
 
+    <bean id="actListener"
+          class="lab.act.service.ActListener"/>
+
 </beans>

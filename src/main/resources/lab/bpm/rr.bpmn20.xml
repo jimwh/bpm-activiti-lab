@@ -6,13 +6,30 @@
 
   <process id="R_R"  isExecutable="true" name="Return-Review-Activate-Deactivate Process">
 
+      <extensionElements>
+          <activiti:executionListener event="start" delegateExpression="${actListener}" />
+      </extensionElements>
+
       <startEvent id="theStart" name="StartEvent"/>
 
-      <userTask id="submit" name="Submit"/>
+      <userTask id="submit" name="Submit">
+      <extensionElements>
+          <activiti:taskListener event="complete" delegateExpression="${actListener}"/>
+      </extensionElements>
+      </userTask>
 
       <transaction id="review_zone">
-          <userTask id="return" name="Return"/>
-          <userTask id="activate" name="Activate"/>
+          <userTask id="return" name="Return">
+          <extensionElements>
+              <activiti:taskListener event="complete" delegateExpression="${actListener}"/>
+          </extensionElements>
+          </userTask>
+
+          <userTask id="activate" name="Activate">
+          <extensionElements>
+              <activiti:taskListener event="complete" delegateExpression="${actListener}"/>
+          </extensionElements>
+          </userTask>
 
           <startEvent id="review_zone_start"/>
           <parallelGateway id="fork"/>
@@ -46,7 +63,12 @@
           <conditionExpression xsi:type="tFormalExpression">${!RETURN}</conditionExpression>
       </sequenceFlow>
 
-      <userTask id="deactivate" name="Deactivate"/>
+      <userTask id="deactivate" name="Deactivate">
+      <extensionElements>
+          <activiti:taskListener event="complete" delegateExpression="${actListener}"/>
+      </extensionElements>
+      </userTask>
+
       <boundaryEvent id="autoDeactivate" cancelActivity="true" attachedToRef="deactivate">
           <timerEventDefinition>
               <timeDuration>PT3S</timeDuration>
