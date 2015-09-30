@@ -51,6 +51,10 @@
         <property name="processEngineConfiguration" ref="processEngineConfiguration"/>
     </bean>
 
+    <bean id="activitiRule" class="org.activiti.engine.test.ActivitiRule">
+        <property name="processEngine" ref="processEngine" />
+    </bean>
+
     <bean id="repositoryService" factory-bean="processEngine"
           factory-method="getRepositoryService"/>
     <bean id="runtimeService" factory-bean="processEngine"
@@ -65,11 +69,6 @@
           factory-method="getFormService"/>
     <bean id="identityService" factory-bean="processEngine"
           factory-method="getIdentityService"/>
-
-
-    <bean id="activitiRule" class="org.activiti.engine.test.ActivitiRule">
-        <property name="processEngine" ref="processEngine" />
-    </bean>
 
     <bean id="actListener"
           class="lab.act.service.ActListener"/>
