@@ -6,8 +6,10 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.activiti.engine.test.ActivitiRule;
 import org.activiti.engine.test.Deployment;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -26,6 +28,12 @@ public class MySignalTest {
 
     private static final Logger log = LoggerFactory.getLogger(MySignalTest.class);
 
+    // include this rule, then you can use @Deployment resource for testing each one
+    // avoid auto deployment
+    @Autowired
+    @Rule
+    public ActivitiRule activitiRule;
+
     @Autowired
     private RuntimeService runtimeService;
 
@@ -36,7 +44,7 @@ public class MySignalTest {
     private HistoryService historyService;
 
     @Test
-    // @Deployment(resources = {"rr_with_signal.bpmn20.xml"} )
+    @Deployment(resources = {"rr_with_signal.bpmn20.xml"} )
     public void test() {
         String procDefKey = "R_R_S";
 

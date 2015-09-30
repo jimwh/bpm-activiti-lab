@@ -31,7 +31,9 @@
         <property name="dataSource" ref="transactionAwareDataSource"/>
         <property name="transactionManager" ref="transactionManager"/>
 
+        <!--
         <property name="deploymentResources" value="classpath*:/lab/bpm/rr_with_signal.bpmn20.xml" />
+        -->
 
         <property name="jobExecutorActivate" value="true"/>
         <property name="asyncExecutorActivate" value="true" />
@@ -63,6 +65,11 @@
           factory-method="getFormService"/>
     <bean id="identityService" factory-bean="processEngine"
           factory-method="getIdentityService"/>
+
+
+    <bean id="activitiRule" class="org.activiti.engine.test.ActivitiRule">
+        <property name="processEngine" ref="processEngine" />
+    </bean>
 
     <bean id="actListener"
           class="lab.act.service.ActListener"/>
