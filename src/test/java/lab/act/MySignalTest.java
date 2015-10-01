@@ -44,17 +44,21 @@ public class MySignalTest {
     private HistoryService historyService;
 
     @Test
-    @Deployment(resources = {"rr_with_signal.bpmn20.xml"} )
+    @Deployment(resources = {"rr_with_signal.bpmn20.xml", "ICOIProcess.bpmn20.xml"} )
     public void test() {
+        testRR();
+        testICOI();
+    }
+
+    public void testRR() {
         String procDefKey = "R_R_S";
-
         testReturn(procDefKey, "testReturn");
-
         testApprove(procDefKey, "testApprove");
+    }
 
-        //testDeactivate(procDefKey, "testDeactivate");
-
-        //testAutoDeactivate();
+    void testICOI() {
+        String procDefKey = "icoiProcess";
+        testReturn(procDefKey, "testReturn");
     }
 
     void testAutoDeactivate() {
@@ -102,7 +106,12 @@ public class MySignalTest {
     }
 
     void testReturn(String procDefKey, String bizKey) {
-        ProcessInstance instance = runtimeService.startProcessInstanceByKey(procDefKey, bizKey);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("RETURN", Boolean.TRUE);
+        map.put("expirationDuration", "P30D");
+        map.put("reactivateExpirationDuration", "P30D");
+
+        ProcessInstance instance = runtimeService.startProcessInstanceByKey(procDefKey, bizKey, map);
         Assert.assertNotNull(instance);
 
         Assert.assertEquals(1, taskCount(bizKey));
@@ -110,8 +119,6 @@ public class MySignalTest {
         completeTask(bizKey, "submit");
         Assert.assertEquals(2, taskCount(bizKey));
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("RETURN", Boolean.TRUE);
         completeTask(bizKey, "return", map);
         //Assert.assertEquals(0, taskCount(bizKey));
         log.info("open:{}", taskCount(bizKey));
