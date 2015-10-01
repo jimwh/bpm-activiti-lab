@@ -122,7 +122,8 @@ public class MySignalTest {
         completeTask(bizKey, "return", map);
         //Assert.assertEquals(0, taskCount(bizKey));
         log.info("open:{}", taskCount(bizKey));
-        printTask(bizKey);
+        // printTask(bizKey);
+        printHistory(bizKey);
     }
 
     void testApprove(String procDefKey, String bizKey) {
@@ -139,7 +140,8 @@ public class MySignalTest {
         completeTask(bizKey, "approve", map);
         //Assert.assertEquals(0, taskCount(bizKey));
         log.info("open:{}", taskCount(bizKey));
-        printTask(bizKey);
+        // printTask(bizKey);
+        printHistory(bizKey);
     }
 
     void completeTask(String bizKey, String taskDefKey) {
