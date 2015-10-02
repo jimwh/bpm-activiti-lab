@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ImportResource;
 
 @Configuration
 @EnableAutoConfiguration
-@ImportResource( { "application-context.xml" } )
+@ImportResource({"application-context.xml"})
 @ComponentScan("lab.act")
 public class Application {
 

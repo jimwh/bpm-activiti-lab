@@ -16,6 +16,7 @@
     <process id="R_R_S" isExecutable="true" name="Return-Review-Activate-Deactivate Process with signal">
 
         <extensionElements>
+
             <activiti:executionListener event="start" delegateExpression="${actListener}"/>
         </extensionElements>
 

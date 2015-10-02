@@ -1,67 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
              xmlns:activiti="http://activiti.org/bpmn"
-             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
-             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
-             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
              typeLanguage="http://www.w3.org/2001/XMLSchema"
              expressionLanguage="http://www.w3.org/1999/XPath"
              targetNamespace="http://www.activiti.org/test">
 
-  <signal id="approveSignal" name="Approve Signal" activiti:scope="processInstance" />
+    <signal id="approveSignal" name="Approve Signal" activiti:scope="processInstance"/>
 
-  <process id="icoiProcess" name="ICOI Intake form process" isExecutable="true" activiti:candidateStarterGroups="ICOI_CAN_PREAPPROVE_INTAKE_FORM">
+    <process id="icoiProcess" name="ICOI Intake form process" isExecutable="true"
+             activiti:candidateStarterGroups="ICOI_CAN_PREAPPROVE_INTAKE_FORM">
+        <extensionElements>
+            <activiti:eventListener class="lab.act.service.ActEvtListener" />
+        </extensionElements>
 
-    <startEvent id="startEvent" name="Start" />
-    <endEvent id="terminateEndEvent" name="TerminateEndEvent">
-      <terminateEventDefinition />
-    </endEvent>
+        <startEvent id="startEvent" name="Start"/>
 
-    <userTask id="submit" name="Submit" activiti:candidateGroups="ICOI_CAN_SUBMIT_INTAKE_FORM" />
-    <endEvent id="endEvent" name="End" />
+        <endEvent id="endEvent" name="End"/>
+        <endEvent id="terminateEndEvent" name="TerminateEndEvent">
+            <terminateEventDefinition/>
+        </endEvent>
 
-    <userTask id="deactivate" name="Deactivate" activiti:candidateGroups="ICOI_CAN_REVIEW_INTAKE_FORM"/>
-    <boundaryEvent id="deactivateTimer" name="Timer" attachedToRef="deactivate" cancelActivity="true">
-      <timerEventDefinition>
-        <timeDuration>${expirationDuration}</timeDuration>
-      </timerEventDefinition>
-    </boundaryEvent>
+        <userTask id="submit" name="Submit" activiti:candidateGroups="ICOI_CAN_SUBMIT_INTAKE_FORM"/>
 
-    <userTask id="reactivate" name="Reactivate" activiti:candidateGroups="ICOI_CAN_REVIEW_INTAKE_FORM"/>
-    <boundaryEvent id="reactivateTimer" name="Timer" attachedToRef="reactivate" cancelActivity="true">
-      <timerEventDefinition>
-        <timeDuration>${reactivateExpirationDuration}</timeDuration>
-      </timerEventDefinition>
-    </boundaryEvent>
+        <userTask id="deactivate" name="Deactivate" activiti:candidateGroups="ICOI_CAN_REVIEW_INTAKE_FORM"/>
+        <boundaryEvent id="deactivateTimer" name="Timer" attachedToRef="deactivate" cancelActivity="true">
+            <timerEventDefinition>
+                <timeDuration>${expirationDuration}</timeDuration>
+            </timerEventDefinition>
+        </boundaryEvent>
 
-    <intermediateThrowEvent id="signalintermediatethrowevent1" name="SignalThrowEvent">
-      <signalEventDefinition signalRef="approveSignal" />
-    </intermediateThrowEvent>
+        <userTask id="reactivate" name="Reactivate" activiti:candidateGroups="ICOI_CAN_REVIEW_INTAKE_FORM"/>
+        <boundaryEvent id="reactivateTimer" name="Timer" attachedToRef="reactivate" cancelActivity="true">
+            <timerEventDefinition>
+                <timeDuration>${reactivateExpirationDuration}</timeDuration>
+            </timerEventDefinition>
+        </boundaryEvent>
 
-    <sequenceFlow sourceRef="startEvent" targetRef="submit" />
-    <sequenceFlow sourceRef="reactivate" targetRef="deactivate" />
-    <userTask id="return" name="Return" activiti:candidateGroups="ICOI_CAN_REVIEW_INTAKE_FORM" />
-    <boundaryEvent id="boundarysignal1" name="Signal" attachedToRef="return" cancelActivity="true">
-      <signalEventDefinition signalRef="approveSignal" />
-    </boundaryEvent>
+        <intermediateThrowEvent id="signalIntermediateThrowEvent" name="SignalThrowEvent">
+            <signalEventDefinition signalRef="approveSignal"/>
+        </intermediateThrowEvent>
 
-    <parallelGateway id="parallelgateway1" />
-    <sequenceFlow sourceRef="submit" targetRef="parallelgateway1" />
-    <sequenceFlow sourceRef="parallelgateway1" targetRef="return" />
+        <userTask id="return" name="Return" activiti:candidateGroups="ICOI_CAN_REVIEW_INTAKE_FORM"/>
+        <boundaryEvent id="boundarySignal" name="Signal" attachedToRef="return" cancelActivity="true">
+            <signalEventDefinition signalRef="approveSignal"/>
+        </boundaryEvent>
 
+        <parallelGateway id="PW"/>
 
-    <sequenceFlow sourceRef="return" targetRef="terminateEndEvent" />
-    <sequenceFlow sourceRef="boundarysignal1" targetRef="endEvent" />
+        <sequenceFlow sourceRef="startEvent" targetRef="submit"/>
+        <sequenceFlow sourceRef="submit" targetRef="PW"/>
 
-    <sequenceFlow sourceRef="reactivateTimer" targetRef="terminateEndEvent" />
-    <sequenceFlow sourceRef="deactivateTimer" targetRef="terminateEndEvent" />
+        <sequenceFlow sourceRef="PW" targetRef="return"/>
+        <sequenceFlow sourceRef="PW" targetRef="deactivate"/>
 
-    <sequenceFlow sourceRef="deactivate" targetRef="signalintermediatethrowevent1" />
-    <sequenceFlow sourceRef="signalintermediatethrowevent1" targetRef="reactivate" />
-    <sequenceFlow sourceRef="parallelgateway1" targetRef="deactivate" />
-  </process>
+        <sequenceFlow sourceRef="return" targetRef="terminateEndEvent"/>
+        <sequenceFlow sourceRef="boundarySignal" targetRef="endEvent"/>
+
+        <sequenceFlow sourceRef="reactivate" targetRef="deactivate"/>
+        <sequenceFlow sourceRef="deactivate" targetRef="signalIntermediateThrowEvent"/>
+        <sequenceFlow sourceRef="signalIntermediateThrowEvent" targetRef="reactivate"/>
+
+        <sequenceFlow sourceRef="reactivateTimer" targetRef="terminateEndEvent"/>
+        <sequenceFlow sourceRef="deactivateTimer" targetRef="terminateEndEvent"/>
+
+    </process>
 
 
 </definitions>

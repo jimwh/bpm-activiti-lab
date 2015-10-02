@@ -48,31 +48,29 @@ public class ActListener implements TaskListener, ExecutionListener {
     public void notify(DelegateTask delegateTask) {
         String eventName = delegateTask.getEventName();
         if (EVENTNAME_CREATE.equals(eventName)) {
-            onCreate(delegateTask);
+            onCreate(EVENTNAME_CREATE, delegateTask);
         } else if (EVENTNAME_COMPLETE.equals(eventName)) {
-            onComplete(delegateTask);
+            onComplete(EVENTNAME_COMPLETE, delegateTask);
+        } else if (EVENTNAME_END.equals(eventName)) {
+            logTaskEvent(EVENTNAME_END, delegateTask);
         }
     }
 
-    private void onCreate(DelegateTask task) {
-        DelegateExecution taskExecution = task.getExecution();
-        String bizKey = taskExecution.getProcessBusinessKey();
-        String processId = taskExecution.getProcessInstanceId();
-        String taskId = task.getId();
-        String taskDefKey = task.getTaskDefinitionKey();
-        log.info("create: bizKey={}, taskDefKey={}, taskId={}, processId={}",
-                bizKey, taskDefKey, taskId, processId);
-
+    private void onCreate(String eventName, DelegateTask task) {
+        logTaskEvent(eventName, task);
     }
 
-    private void onComplete(DelegateTask task) {
+    private void onComplete(String eventName, DelegateTask task) {
+        logTaskEvent(eventName, task);
+    }
+
+    private void logTaskEvent(String eventName, DelegateTask task) {
         DelegateExecution taskExecution = task.getExecution();
         String bizKey = taskExecution.getProcessBusinessKey();
         String processId = taskExecution.getProcessInstanceId();
         String taskId = task.getId();
         String taskDefKey = task.getTaskDefinitionKey();
-        log.info("complete: bizKey={}, taskDefKey={}, taskId={}, processId={}",
-                bizKey, taskDefKey, taskId, processId);
-
+        log.info("{}: bizKey={}, taskDefKey={}, taskId={}, processId={}",
+                eventName, bizKey, taskDefKey, taskId, processId);
     }
 }

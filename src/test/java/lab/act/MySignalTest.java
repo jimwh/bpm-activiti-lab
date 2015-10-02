@@ -44,7 +44,7 @@ public class MySignalTest {
     private HistoryService historyService;
 
     @Test
-    @Deployment(resources = {"rr_with_signal.bpmn20.xml", "ICOIProcess.bpmn20.xml"} )
+    @Deployment(resources = {"rr_with_signal.bpmn20.xml", "ICOIProcess.bpmn20.xml"})
     public void test() {
         testRR();
         testICOI();

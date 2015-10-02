@@ -19,9 +19,9 @@
         </bean>
 -->
     <bean name="dataSource" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close" primary="true">
-        <property name="URL" value="${db.url}" />
-        <property name="user" value="${db.username}" />
-        <property name="password" value="${db.password}" />
+        <property name="URL" value="${db.url}"/>
+        <property name="user" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
         <property name="connectionCacheProperties">
             <value>
                 MinLimit:1
@@ -44,7 +44,7 @@
     -->
 
     <bean id="transactionAwareDataSource" class="org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy">
-        <property name="targetDataSource" ref="dataSource" />
+        <property name="targetDataSource" ref="dataSource"/>
     </bean>
 
 </beans>
