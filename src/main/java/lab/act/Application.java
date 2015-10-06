@@ -24,8 +24,9 @@ public class Application {
         log.info("start...");
 
         ApplicationContext ctx = SpringApplication.run(Application.class, args);
-        //MiddleMan mm = ctx.getBean(MiddleMan.class);
-        //mm.suspendProtocol("4901");
+
+        deployment(ctx);
+
         SpringApplication.exit(ctx);
 
         log.info("done...");
@@ -36,9 +37,10 @@ public class Application {
                 (RepositoryService) ctx.getBean("repositoryService");
         String deploymentId = repositoryService
                 .createDeployment()
-                .addClasspathResource("org/activiti/spring/test/hello.bpmn20.xml")
+                .addClasspathResource("dualSignals.bpmn20.xml")
                 .deploy()
                 .getId();
         log.info("deploymentId={}", deploymentId);
+        repositoryService.deleteDeployment(deploymentId);
     }
 }
