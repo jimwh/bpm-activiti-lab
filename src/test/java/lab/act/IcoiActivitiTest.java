@@ -17,6 +17,7 @@ import java.util.Map;
 public class IcoiActivitiTest extends UnitTestAccessor {
 
     private static final Logger log = LoggerFactory.getLogger(IcoiActivitiTest.class);
+
     @Test
     @Deployment(resources = {"ICOIProcess.bpmn20.xml"})
     public void testICOI() {
@@ -61,7 +62,7 @@ public class IcoiActivitiTest extends UnitTestAccessor {
     }
 
     void testReActivate(String procDefKey) {
-        String bizKey="testReActivate";
+        String bizKey = "testReActivate";
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("expirationDuration", "PT3S");
         map.put("reactivateExpirationDuration", "PT3S");

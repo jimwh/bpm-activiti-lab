@@ -17,7 +17,7 @@
 
         <extensionElements>
             <activiti:executionListener event="start"
-             class="lab.act.service.ActListener" />
+                                        class="lab.act.service.ActListener"/>
         </extensionElements>
 
         <startEvent id="theStart" name="StartEvent"/>
@@ -26,14 +26,14 @@
         <userTask id="enter" name="Enter Choice">
             <extensionElements>
                 <activiti:taskListener event="complete"
-                                       class="lab.act.service.ActListener" />
+                                       class="lab.act.service.ActListener"/>
             </extensionElements>
         </userTask>
 
         <userTask id="train" name="Take train">
             <extensionElements>
                 <activiti:taskListener event="complete"
-                                       class="lab.act.service.ActListener" />
+                                       class="lab.act.service.ActListener"/>
             </extensionElements>
         </userTask>
         <boundaryEvent id="boundary" name="trainBoundary" attachedToRef="train" cancelActivity="true">
@@ -44,7 +44,7 @@
             <extensionElements>
                 <activiti:taskListener event="complete"
                                        class="lab.act.service.ActListener"
-                                       />
+                        />
             </extensionElements>
         </userTask>
         <boundaryEvent id="boundaryflight" name="flightBoundary" attachedToRef="flight" cancelActivity="true">
@@ -69,8 +69,8 @@
         <sequenceFlow sourceRef="fork" targetRef="train"/>
         <sequenceFlow sourceRef="fork" targetRef="flight"/>
 
-        <exclusiveGateway id="EW" />
-        <userTask id="bookTicket" name="Book ticket" />
+        <exclusiveGateway id="EW"/>
+        <userTask id="bookTicket" name="Book ticket"/>
         <sequenceFlow sourceRef="EW" targetRef="bookTicket"/>
 
         <sequenceFlow sourceRef="boundary" targetRef="EW"/>

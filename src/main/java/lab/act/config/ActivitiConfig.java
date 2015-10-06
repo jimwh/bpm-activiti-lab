@@ -1,62 +1,49 @@
-package lab.act;
+package lab.act.config;
 
 import org.activiti.engine.*;
 import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
-import org.springframework.test.context.ContextConfiguration;
 
-import javax.sql.DataSource;
 import java.util.HashSet;
 import java.util.Set;
 
+@Import(DataSourceConfig.class)
 @Configuration
-@ContextConfiguration
 public class ActivitiConfig {
     private static final Logger log = LoggerFactory.getLogger(ActivitiConfig.class);
 
-    @Bean
-    @Primary
-    public DataSource dataSource() {
-        return DataSourceBuilder.create()
-                .driverClassName("org.h2.Driver")
-                .url("jdbc:h2:mem:activiti;DB_CLOSE_DELAY=1000")
-                .username("sa")
-                .password("")
-                .build();
-    }
+    @Autowired
+    @Qualifier("primaryTransactionAwareDataSource")
+    public TransactionAwareDataSourceProxy transactionAwareDataSource;
 
-    @Bean
-    public TransactionAwareDataSourceProxy transactionAwareDataSource() {
-        return new TransactionAwareDataSourceProxy(dataSource());
-    }
-
-    @Bean
-    public DataSourceTransactionManager transactionManager() {
-        return new DataSourceTransactionManager(dataSource());
-    }
+    @Autowired
+    @Qualifier("primaryTransactionManager")
+    public DataSourceTransactionManager transactionManager;
 
     @Bean
     public ProcessEngine processEngine() {
         SpringProcessEngineConfiguration config = new SpringProcessEngineConfiguration();
-        config.setDataSource(transactionAwareDataSource());
-        config.setTransactionManager(transactionManager());
-        config.setProcessEngineName("ACTIVITI-LAB-BPM-ENGINE");
-        config.setDatabaseType("h2");
-        config.setDatabaseSchemaUpdate("create-drop");
+        config.setDataSource(transactionAwareDataSource);
+        config.setTransactionManager(transactionManager);
+        config.setProcessEngineName("RASCAL-ACTIVITI-BPM-ENGINE");
+        config.setDatabaseType("oracle");
+        config.setDatabaseSchemaUpdate("false");
         config.setJobExecutorActivate(true);
         config.setAsyncExecutorActivate(true);
         config.setHistory("full");
         Set<Class<?>> set = new HashSet<Class<?>>();
         set.add(lab.act.service.LabMybatisMapper.class);
         config.setCustomMybatisMappers(set);
+        //Resource
+        //config.setDeploymentResources();
         return config.buildProcessEngine();
     }
 

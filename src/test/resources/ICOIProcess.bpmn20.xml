@@ -10,7 +10,7 @@
     <process id="icoiProcess" name="ICOI Intake form process" isExecutable="true"
              activiti:candidateStarterGroups="ICOI_CAN_PREAPPROVE_INTAKE_FORM">
         <extensionElements>
-            <activiti:eventListener class="lab.act.service.ActEvtListener" />
+            <activiti:eventListener class="lab.act.service.ActEvtListener"/>
         </extensionElements>
 
         <startEvent id="startEvent" name="Start"/>

@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ public class UnitTestAccessor {
 
     @Autowired
     protected ProcessEngine processEngine;
+
     @Rule
     public ActivitiRule activitiRule() {
         ActivitiRule rule = new ActivitiRule(processEngine);
@@ -41,7 +43,7 @@ public class UnitTestAccessor {
         Assert.assertNotNull(instance);
     }
 
-    public void startProcessInstanceByKey(String procDefKey, String bizKey, Map<String, Object>map) {
+    public void startProcessInstanceByKey(String procDefKey, String bizKey, Map<String, Object> map) {
         ProcessInstance instance = runtimeService.startProcessInstanceByKey(procDefKey, bizKey, map);
         Assert.assertNotNull(instance);
     }
