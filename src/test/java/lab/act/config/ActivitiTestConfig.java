@@ -1,4 +1,4 @@
-package lab.act;
+package lab.act.config;
 
 import org.activiti.engine.*;
 import org.activiti.spring.SpringProcessEngineConfiguration;
@@ -19,8 +19,8 @@ import java.util.Set;
 
 @Configuration
 @ContextConfiguration
-public class ActivitiConfig {
-    private static final Logger log = LoggerFactory.getLogger(ActivitiConfig.class);
+public class ActivitiTestConfig {
+    private static final Logger log = LoggerFactory.getLogger(ActivitiTestConfig.class);
 
     @Bean
     @Primary

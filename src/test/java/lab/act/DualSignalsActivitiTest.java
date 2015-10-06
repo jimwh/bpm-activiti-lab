@@ -1,5 +1,7 @@
 package lab.act;
 
+import lab.act.config.ActivitiTestConfig;
+import lab.act.config.UnitTestAccessor;
 import org.activiti.engine.test.Deployment;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,7 +18,7 @@ import java.util.Map;
  * house keeper work in UnitTestAccessor, here just focus on task and work flow
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {ActivitiConfig.class})
+@SpringApplicationConfiguration(classes = {ActivitiTestConfig.class})
 public class DualSignalsActivitiTest extends UnitTestAccessor {
 
     private static final Logger log = LoggerFactory.getLogger(DualSignalsActivitiTest.class);

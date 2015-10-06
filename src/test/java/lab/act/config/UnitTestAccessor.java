@@ -1,4 +1,4 @@
-package lab.act;
+package lab.act.config;
 
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricTaskInstance;
