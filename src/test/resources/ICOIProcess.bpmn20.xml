@@ -56,9 +56,9 @@
         <sequenceFlow sourceRef="return" targetRef="terminateEndEvent"/>
         <sequenceFlow sourceRef="boundarySignal" targetRef="endEvent"/>
 
-        <sequenceFlow sourceRef="reactivate" targetRef="deactivate"/>
         <sequenceFlow sourceRef="deactivate" targetRef="signalIntermediateThrowEvent"/>
         <sequenceFlow sourceRef="signalIntermediateThrowEvent" targetRef="reactivate"/>
+        <sequenceFlow sourceRef="reactivate" targetRef="deactivate"/>
 
         <sequenceFlow sourceRef="reactivateTimer" targetRef="terminateEndEvent"/>
         <sequenceFlow sourceRef="deactivateTimer" targetRef="terminateEndEvent"/>
