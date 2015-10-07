@@ -1,4 +1,4 @@
-package lab.act;
+package lab.act.testconf;
 
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -18,16 +18,12 @@ import java.util.Map;
  * handy class for testing
  */
 public class UnitTestAccessor {
+
     private static final Logger log = LoggerFactory.getLogger(UnitTestAccessor.class);
 
-    @Autowired
-    protected ProcessEngine processEngine;
-
     @Rule
-    public ActivitiRule activitiRule() {
-        ActivitiRule rule = new ActivitiRule(processEngine);
-        return rule;
-    }
+    @Autowired
+    public ActivitiRule activitiRule;
 
     @Autowired
     public RuntimeService runtimeService;

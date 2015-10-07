@@ -1,6 +1,7 @@
-package lab.act;
+package lab.act.testconf;
 
 import org.activiti.engine.*;
+import org.activiti.engine.test.ActivitiRule;
 import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,7 @@ public class ActivitiConfig {
     @Bean
     @Primary
     public DataSource dataSource() {
+        log.info("datasource first...");
         return DataSourceBuilder.create()
                 .driverClassName("org.h2.Driver")
                 .url("jdbc:h2:mem:activiti;DB_CLOSE_DELAY=1000")
@@ -86,22 +88,24 @@ public class ActivitiConfig {
         return processEngine().getHistoryService();
     }
 
-    @Autowired
     @Bean
     public ManagementService getManagementService() {
         return processEngine().getManagementService();
     }
 
-    @Autowired
     @Bean
     public IdentityService getIdentityService() {
         return processEngine().getIdentityService();
     }
 
-    @Autowired
     @Bean
     public FormService getFormService() {
         return processEngine().getFormService();
+    }
+
+    @Bean
+    public ActivitiRule activitiRule() {
+        return new ActivitiRule(processEngine());
     }
 
 }

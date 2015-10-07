@@ -1,5 +1,7 @@
 package lab.act;
 
+import lab.act.testconf.ActivitiConfig;
+import lab.act.testconf.UnitTestAccessor;
 import org.activiti.engine.test.Deployment;
 import org.junit.Assert;
 import org.junit.Test;
