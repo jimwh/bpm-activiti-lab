@@ -2,6 +2,7 @@ package lab.act;
 
 import lab.act.testconf.ActivitiConfig;
 import lab.act.testconf.UnitTestAccessor;
+import org.activiti.engine.task.Task;
 import org.activiti.engine.test.Deployment;
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,17 +37,13 @@ public class DualSignalsActivitiTest extends UnitTestAccessor {
     }
 
     void takeTrain(String procDefKey, String bizKey) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("RETURN", Boolean.TRUE);
-
-        startProcessInstanceByKey(procDefKey, bizKey, map);
-
+        startProcessInstanceByKey(procDefKey, bizKey);
         Assert.assertEquals(1, taskCount(bizKey));
 
         completeTask(bizKey, "enter");
         Assert.assertEquals(2, taskCount(bizKey));
 
-        completeTask(bizKey, "train", map);
+        completeTask(bizKey, "train");
         Assert.assertEquals(1, taskCount(bizKey));
         Assert.assertNotNull(getTask(bizKey, "bookTicket"));
     }
@@ -59,11 +56,15 @@ public class DualSignalsActivitiTest extends UnitTestAccessor {
         completeTask(bizKey, "enter");
         Assert.assertEquals(2, taskCount(bizKey));
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("RETURN", Boolean.FALSE);
-        completeTask(bizKey, "flight", map);
+        Task task = getTask(bizKey, "flight");
+        taskService.setVariable(task.getId(), "from", "flight");
+        completeTask(bizKey, "flight");
+
         Assert.assertEquals(1, taskCount(bizKey));
         Assert.assertNotNull(getTask(bizKey, "bookTicket"));
+        task = getTask(bizKey, "bookTicket");
+        Assert.assertNotNull(taskService.getVariable(task.getId(), "from"));
+        log.info("previous task is {}", taskService.getVariable(task.getId(), "from").toString());
     }
 
 }
