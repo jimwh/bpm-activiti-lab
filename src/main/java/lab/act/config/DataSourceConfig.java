@@ -41,7 +41,6 @@ public class DataSourceConfig {
     }
 
     @Bean
-    @Primary
     public DataSource secondaryDataSource() {
         return DataSourceBuilder.create()
                 .driverClassName(env.getProperty("secondary.driverClassName"))

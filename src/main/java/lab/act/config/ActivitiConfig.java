@@ -67,25 +67,21 @@ public class ActivitiConfig {
         return processEngine().getTaskService();
     }
 
-    @Autowired
     @Bean
     public HistoryService getHistoryService() {
         return processEngine().getHistoryService();
     }
 
-    @Autowired
     @Bean
     public ManagementService getManagementService() {
         return processEngine().getManagementService();
     }
 
-    @Autowired
     @Bean
     public IdentityService getIdentityService() {
         return processEngine().getIdentityService();
     }
 
-    @Autowired
     @Bean
     public FormService getFormService() {
         return processEngine().getFormService();
