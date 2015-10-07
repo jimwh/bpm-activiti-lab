@@ -82,7 +82,6 @@ public class ActivitiConfig {
         return processEngine().getTaskService();
     }
 
-    @Autowired
     @Bean
     public HistoryService getHistoryService() {
         return processEngine().getHistoryService();
