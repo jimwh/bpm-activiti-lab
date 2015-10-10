@@ -3,6 +3,7 @@ package lab.act;
 import lab.act.config.ActivitiConfig;
 import lab.act.config.DataSourceConfig;
 
+import lab.act.service.FooBar;
 import org.activiti.engine.RepositoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,9 @@ public class Application {
         ApplicationContext ctx = SpringApplication.run(Application.class, args);
 
         deployment(ctx);
+
+        FooBar fooBar=ctx.getBean(FooBar.class);
+        log.info("foobar.dir={}", fooBar.getDir());
 
         SpringApplication.exit(ctx);
 

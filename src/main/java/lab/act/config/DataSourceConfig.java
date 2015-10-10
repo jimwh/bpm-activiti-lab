@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 @Configuration
-@PropertySources({@PropertySource("classpath:/${env}.db.properties")})
+@PropertySources({@PropertySource("classpath:${env}.db.properties"),@PropertySource("classpath:application.properties")})
 public class DataSourceConfig {
 
     @Autowired
