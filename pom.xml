@@ -61,20 +61,19 @@
             <version>${activiti.version}</version>
         </dependency>
 
-
-        <!--
                 <dependency>
                     <groupId>com.oracle</groupId>
                     <artifactId>ojdbc7</artifactId>
                     <version>12.1.0.2</version>
                 </dependency>
-        -->
+        <!--
 
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc6</artifactId>
             <version>11.2.0.3</version>
         </dependency>
+        -->
 
         <dependency>
             <groupId>com.h2database</groupId>
@@ -101,12 +100,13 @@
                 <configuration>
                     <verbose>false</verbose>
                     <fork>true</fork>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                     <meminitial>128m</meminitial>
                     <maxmem>512m</maxmem>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
