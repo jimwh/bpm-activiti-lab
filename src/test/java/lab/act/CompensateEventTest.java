@@ -27,6 +27,5 @@ public class CompensateEventTest extends UnitTestAccessor {
         runtimeService.signal(processInstance.getId());
 
         //assertProcessEnded(processInstance.getId());
-
     }
 }
