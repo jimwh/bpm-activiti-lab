@@ -7,7 +7,7 @@
         expressionLanguage="http://www.w3.org/1999/XPath"
         targetNamespace="expiration-reminder">
 
-    <error id="reminderError" errorCode="ReminderException"/>
+    <error id="reminderError" errorCode="ReminderException" />
 
     <process id="ExpirationReminder" name="Reminder">
 
@@ -37,7 +37,7 @@
         <userTask id="userResolver" name="userResolver" />
         <sequenceFlow sourceRef="userResolver" targetRef="theEnd"/>
 
-        <endEvent id="theEnd"/>
+        <endEvent id="theEnd" name="end"/>
 
     </process>
 
