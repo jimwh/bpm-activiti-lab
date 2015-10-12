@@ -2,6 +2,7 @@ package lab.act.testconf;
 
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -101,14 +102,25 @@ public class UnitTestAccessor {
     }
 
     public void printActivityHistory(String procDefKey, String bizKey) {
-        List<HistoricActivityInstance> list =
-                historyService.createHistoricActivityInstanceQuery()
-                //.orderByProcessDefinitionId(procDefKey)
-                //.processDefinitionId(procDefKey)
-                //.finished()
-                .orderByHistoricActivityInstanceEndTime()
+        List<HistoricProcessInstance> historicProcessInstanceList = historyService.createHistoricProcessInstanceQuery()
+                .notDeleted()
+                .processDefinitionKey(procDefKey)
+                .processInstanceBusinessKey(bizKey)
+                .orderByProcessInstanceEndTime()
                 .desc()
                 .list();
+
+        for (HistoricProcessInstance hp : historicProcessInstanceList) {
+            log.info("{}, {}, {}", hp.getProcessDefinitionId(), hp.getId(), hp.getEndTime());
+        }
+        HistoricProcessInstance hp = historicProcessInstanceList.get(0);
+
+        List<HistoricActivityInstance> list =
+                historyService.createHistoricActivityInstanceQuery()
+                        .processInstanceId(hp.getId())
+                        .orderByHistoricActivityInstanceEndTime()
+                        .desc()
+                        .list();
         for (HistoricActivityInstance ht : list) {
             log.info("key={}, name={}, endTime={}",
                     ht.getProcessDefinitionId(),
