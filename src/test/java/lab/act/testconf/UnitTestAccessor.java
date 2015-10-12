@@ -1,6 +1,7 @@
 package lab.act.testconf;
 
 import org.activiti.engine.*;
+import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -97,6 +98,23 @@ public class UnitTestAccessor {
                 .processInstanceBusinessKey(bizKey)
                 .taskDefinitionKey(taskDefKey)
                 .singleResult();
+    }
+
+    public void printActivityHistory(String procDefKey, String bizKey) {
+        List<HistoricActivityInstance> list =
+                historyService.createHistoricActivityInstanceQuery()
+                //.orderByProcessDefinitionId(procDefKey)
+                //.processDefinitionId(procDefKey)
+                //.finished()
+                .orderByHistoricActivityInstanceEndTime()
+                .desc()
+                .list();
+        for (HistoricActivityInstance ht : list) {
+            log.info("key={}, name={}, endTime={}",
+                    ht.getProcessDefinitionId(),
+                    ht.getActivityName(),
+                    ht.getEndTime());
+        }
     }
 
 }

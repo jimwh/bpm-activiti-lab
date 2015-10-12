@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class DualSignalsActivitiTest extends UnitTestAccessor {
 
     @Test
-    @Deployment(resources = {"dualSignals.bpmn20.xml"})
+    @Deployment(resources = {"bpm/dualSignals.bpmn20.xml"})
     public void test() {
         String procDefKey = "dualSignals";
 

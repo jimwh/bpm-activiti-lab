@@ -41,7 +41,7 @@ public class Application {
                 (RepositoryService) ctx.getBean("repositoryService");
         String deploymentId = repositoryService
                 .createDeployment()
-                .addClasspathResource("dualSignals.bpmn20.xml")
+                .addClasspathResource("bpm/dualSignals.bpmn20.xml")
                 .deploy()
                 .getId();
         log.info("deploymentId={}", deploymentId);

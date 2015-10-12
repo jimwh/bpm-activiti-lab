@@ -1,9 +1,6 @@
 package lab.act.listeners;
 
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.DelegateTask;
-import org.activiti.engine.delegate.ExecutionListener;
-import org.activiti.engine.delegate.TaskListener;
+import org.activiti.engine.delegate.*;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,4 +70,6 @@ public class ActListener implements TaskListener, ExecutionListener {
         log.info("{}: bizKey={}, taskDefKey={}, taskId={}, processId={}",
                 eventName, bizKey, taskDefKey, taskId, processId);
     }
+
+
 }

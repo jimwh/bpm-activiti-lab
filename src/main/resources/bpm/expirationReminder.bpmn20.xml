@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<definitions
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:activiti="http://activiti.org/bpmn"
+        xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+        typeLanguage="http://www.w3.org/2001/XMLSchema"
+        expressionLanguage="http://www.w3.org/1999/XPath"
+        targetNamespace="expiration-reminder">
+
+    <error id="reminderError" errorCode="ReminderException"/>
+
+    <process id="ExpirationReminder" name="Reminder">
+
+        <startEvent id="theStart" name="Start"/>
+
+        <intermediateCatchEvent id="timer" name="timer">
+            <timerEventDefinition>
+                <!--
+                <timeDate>${remindDate}</timeDate>
+                -->
+                <timeDuration>${remindDate}</timeDuration>
+            </timerEventDefinition>
+        </intermediateCatchEvent>
+
+        <serviceTask id="reminder" name="Reminder"
+                     activiti:class="lab.act.service.ExpirationReminder" />
+
+        <boundaryEvent id="catchError" attachedToRef="reminder" name="catchError">
+            <errorEventDefinition errorRef="reminderError"/>
+        </boundaryEvent>
+
+        <sequenceFlow sourceRef="theStart" targetRef="timer"/>
+        <sequenceFlow sourceRef="timer" targetRef="reminder"/>
+        <sequenceFlow sourceRef="reminder" targetRef="theEnd"/>
+
+        <sequenceFlow sourceRef="catchError" targetRef="userResolver"/>
+        <userTask id="userResolver" name="userResolver" />
+        <sequenceFlow sourceRef="userResolver" targetRef="theEnd"/>
+
+        <endEvent id="theEnd"/>
+
+    </process>
+
+</definitions>
