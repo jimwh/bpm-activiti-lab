@@ -20,5 +20,4 @@ public class SetVariablesDelegate implements JavaDelegate {
         execution.setVariableLocal("variable", lastInt);
         lastInt++;
     }
-
 }
