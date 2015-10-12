@@ -24,6 +24,7 @@ hs_err_pid*
 *.iml
 logs/
 *.log
+target/
 .target/
 .classpath/
 .project/

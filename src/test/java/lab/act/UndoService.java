@@ -13,6 +13,7 @@ public class UndoService implements JavaDelegate {
 
     public void execute(DelegateExecution execution) throws Exception {
         String variableName = (String) counterName.getValue(execution);
+        log.info("variableName={}", variableName);
         Object variable = execution.getVariable(variableName);
         if (variable == null) {
             execution.setVariable(variableName, 1);

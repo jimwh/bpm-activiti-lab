@@ -16,6 +16,7 @@ public class GetVariablesDelegate implements JavaDelegate {
 
         Integer variable = SetVariablesDelegate.variablesMap.get(nrOfCompletedInstances);
         Object variableLocal = execution.getVariable("variable");
+        log.info("variable={}", variableLocal);
         if (!variableLocal.equals(variable)) {
             throw new ActivitiIllegalArgumentException("wrong variable passed in to compensation handler");
         }
