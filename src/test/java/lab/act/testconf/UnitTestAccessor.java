@@ -7,6 +7,7 @@ import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.test.ActivitiRule;
+import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.slf4j.Logger;
@@ -113,9 +114,6 @@ public class UnitTestAccessor {
                 .desc()
                 .list();
 
-        for (HistoricProcessInstance hp : historicProcessInstanceList) {
-            log.info("{}, {}, {}", hp.getProcessDefinitionId(), hp.getId(), hp.getEndTime());
-        }
         HistoricProcessInstance hp = historicProcessInstanceList.get(0);
 
         List<HistoricActivityInstance> list =
@@ -125,10 +123,11 @@ public class UnitTestAccessor {
                         .desc()
                         .list();
         for (HistoricActivityInstance ht : list) {
+            DateTime dt = new DateTime(ht.getEndTime());
             log.info("key={}, name={}, endTime={}",
                     ht.getProcessDefinitionId(),
                     ht.getActivityName(),
-                    ht.getEndTime());
+                    dt.toString("MM/dd/yyyy HH:mm:ss"));
         }
     }
 
@@ -141,14 +140,14 @@ public class UnitTestAccessor {
                 .orderByProcessDefinitionId()
                 .desc()
                 .list();
-        return list.get(0);
+        return list.isEmpty() ? null : list.get(0);
     }
 
     public boolean hasProcess(String processId) {
         return runtimeService.createProcessInstanceQuery()
                 .processInstanceId(processId)
                 .active()
-                .singleResult()==null;
+                .singleResult()!=null;
     }
 
 
