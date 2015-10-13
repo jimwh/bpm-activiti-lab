@@ -11,6 +11,7 @@ import java.util.Map;
 public class SetVariablesDelegate implements JavaDelegate {
 
     private static final Logger log = LoggerFactory.getLogger(SetVariablesDelegate.class);
+
     public static Map<Object, Integer> variablesMap = new HashMap<Object, Integer>();
 
     // activiti creates a single instance of the delegate
