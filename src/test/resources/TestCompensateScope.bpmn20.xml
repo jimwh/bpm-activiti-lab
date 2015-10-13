@@ -20,7 +20,6 @@
                 <loopCardinality>5</loopCardinality>
             </multiInstanceLoopCharacteristics>
         </serviceTask>
-
         <boundaryEvent id="compensateBookHotelEvt" name="Boundary event" attachedToRef="bookHotel">
             <compensateEventDefinition/>
         </boundaryEvent>
@@ -37,7 +36,6 @@
                 <loopCardinality>5</loopCardinality>
             </multiInstanceLoopCharacteristics>
         </serviceTask>
-
         <boundaryEvent id="compensateBookFlightEvt" name="Boundary event" attachedToRef="bookFlight">
             <compensateEventDefinition/>
         </boundaryEvent>
