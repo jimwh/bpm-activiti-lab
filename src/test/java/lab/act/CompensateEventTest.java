@@ -11,7 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import static org.activiti.engine.impl.test.TestHelper.assertProcessEnded;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {ActivitiConfig.class})
@@ -21,16 +23,16 @@ public class CompensateEventTest extends UnitTestAccessor {
     @Test
     @Deployment(resources = {"TestCompensateScope.bpmn20.xml"})
     public void testCompensateScope() {
+        String procKey = "compensateProcess";
+        String bizKey = "testCompensateScope";
+        startProcessInstanceByKey(procKey, bizKey);
+        ProcessInstance instance = getProcessInstance(procKey,bizKey);
+        assertEquals(5, runtimeService.getVariable(instance.getId(), "undoBookHotel"));
+        assertEquals(5, runtimeService.getVariable(instance.getId(), "undoBookFlight"));
 
-
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("compensateProcess");
-
-        //assertEquals(5, runtimeService.getVariable(processInstance.getId(), "undoBookHotel"));
-        //assertEquals(5, runtimeService.getVariable(processInstance.getId(), "undoBookFlight"));
-        log.info("undoBookHotel: {}", runtimeService.getVariable(processInstance.getId(), "undoBookHotel"));
-        log.info("undoBookFlight: {}",runtimeService.getVariable(processInstance.getId(), "undoBookFlight"));
-        runtimeService.signal(processInstance.getId());
-
-        //assertProcessEnded(processInstance.getId());
+        runtimeService.signal(instance.getId());
+        log.info("has={}",  hasProcess(instance.getId()));
+        printActivityHistory(procKey,bizKey);
+        printTaskHistory(procKey,bizKey);
     }
 }

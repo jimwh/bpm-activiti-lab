@@ -28,6 +28,9 @@ public class UnitTestAccessor {
     public ActivitiRule activitiRule;
 
     @Autowired
+    public ProcessEngine processEngine;
+
+    @Autowired
     public RuntimeService runtimeService;
 
     @Autowired
@@ -128,5 +131,25 @@ public class UnitTestAccessor {
                     ht.getEndTime());
         }
     }
+
+    public ProcessInstance getProcessInstance(String procKey, String bizKey) {
+        List<ProcessInstance> list = runtimeService.createProcessInstanceQuery()
+                .active()
+                .includeProcessVariables()
+                .processDefinitionKey(procKey)
+                .processInstanceBusinessKey(bizKey)
+                .orderByProcessDefinitionId()
+                .desc()
+                .list();
+        return list.get(0);
+    }
+
+    public boolean hasProcess(String processId) {
+        return runtimeService.createProcessInstanceQuery()
+                .processInstanceId(processId)
+                .active()
+                .singleResult()==null;
+    }
+
 
 }
