@@ -2,6 +2,7 @@ package lab.act;
 
 import lab.act.testconf.ActivitiConfig;
 import lab.act.testconf.UnitTestAccessor;
+import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.test.Deployment;
 import org.junit.Test;
@@ -13,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.activiti.engine.impl.test.TestHelper.assertProcessEnded;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -30,8 +32,16 @@ public class CompensateEventTest extends UnitTestAccessor {
         assertEquals(5, runtimeService.getVariable(instance.getId(), "undoBookHotel"));
         assertEquals(5, runtimeService.getVariable(instance.getId(), "undoBookFlight"));
 
-        runtimeService.signal(instance.getId());
+        Execution execution = runtimeService.createExecutionQuery()
+                .processInstanceId(instance.getId())
+                .activityId("beforeEnd")
+                .singleResult();
+        assertNotNull(execution);
+
+        runtimeService.signal(execution.getId());
+
         log.info("has={}",  hasProcess(instance.getId()));
+
         printActivityHistory(procKey,bizKey);
         printTaskHistory(procKey,bizKey);
     }
