@@ -3,16 +3,13 @@ package lab.act;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.Expression;
 import org.activiti.engine.delegate.JavaDelegate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Set;
 
 public class UndoService implements JavaDelegate {
 
-    private static final Logger log = LoggerFactory.getLogger(UndoService.class);
-
-    private Expression counterName;
+    @SuppressWarnings("unused")
+	private Expression counterName;
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {

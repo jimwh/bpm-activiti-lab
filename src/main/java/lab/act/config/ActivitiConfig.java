@@ -2,8 +2,6 @@ package lab.act.config;
 
 import org.activiti.engine.*;
 import org.activiti.spring.SpringProcessEngineConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +16,6 @@ import java.util.Set;
 @Import(DataSourceConfig.class)
 @Configuration
 public class ActivitiConfig {
-    private static final Logger log = LoggerFactory.getLogger(ActivitiConfig.class);
 
     @Autowired
     @Qualifier("primaryTransactionAwareDataSource")

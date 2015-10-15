@@ -10,7 +10,8 @@ import org.slf4j.LoggerFactory;
  */
 public class ActListener implements TaskListener, ExecutionListener {
 
-    private static final Logger log = LoggerFactory.getLogger(ActListener.class);
+	private static final long serialVersionUID = 1L;
+	private static final Logger log = LoggerFactory.getLogger(ActListener.class);
 
     @Override
     public void notify(DelegateExecution delegateExecution) throws Exception {
