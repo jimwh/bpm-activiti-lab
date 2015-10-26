@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.activiti.org/processdef">
+
+    <signal id="cancelApplication" name="cancelApplication" activiti:scope="processInstance"/>
+
+    <process id="hireProcess" name="Developer Hiring" isExecutable="true">
+
+        <serviceTask id="storeResume"
+                     name="Store resume"
+                     activiti:expression="${devHireService.storeResume()}" />
+
+        <userTask id="phoneInterview"
+                  name="Telephone interview"
+                  activiti:candidateGroups="dev-managers">
+            <documentation>Conduct a telephone interview with ${applicantName}. Phone number = ${phoneNumber}
+            </documentation>
+        </userTask>
+
+        <exclusiveGateway id="EGW1"/>
+
+        <endEvent id="theEndEvent"/>
+
+        <serviceTask id="sendRejectionEmail"
+                     name="Send rejection email"
+                     activiti:expression="${devHireService.sendRejectionEmail()}" />
+
+        <endEvent id="rejectedEvent" name="rejected" />
+
+        <serviceTask id="sendWelcomEmail"
+                     name="Send welcome mail"
+                     activiti:expression="${devHireService.sendWelcomeEmail()}" />
+
+        <startEvent id="theStart" />
+        <endEvent id="applicationCancelled"/>
+        <endEvent id="acceptedEvent" name="accepted"/>
+
+        <subProcess id="SP" name="subProcess">
+            <startEvent id="startSP"/>
+            <parallelGateway id="PGW1"/>
+            <userTask id="techInterview"
+                      name="Tech interview"
+                      activiti:candidateGroups="dev-management"/>
+            <userTask id="financialNegotiation"
+                      name="Financial negotiation"
+                      activiti:candidateGroups="finance"/>
+            <parallelGateway id="PGW2"/>
+            <endEvent id="endSP"/>
+            <sequenceFlow sourceRef="startSP" targetRef="PGW1"/>
+            <sequenceFlow sourceRef="PGW1" targetRef="techInterview"/>
+            <sequenceFlow sourceRef="PGW1" targetRef="financialNegotiation"/>
+            <sequenceFlow sourceRef="techInterview" targetRef="PGW2"/>
+            <sequenceFlow sourceRef="financialNegotiation" targetRef="PGW2"/>
+            <sequenceFlow sourceRef="PGW2" targetRef="endSP"/>
+        </subProcess>
+        <boundaryEvent id="BE"
+                       name="applicant cancels"
+                       attachedToRef="SP" cancelActivity="true">
+            <signalEventDefinition signalRef="cancelApplication"/>
+        </boundaryEvent>
+
+        <sequenceFlow sourceRef="BE" targetRef="applicationCancelled"/>
+
+        <sequenceFlow sourceRef="theStart" targetRef="storeResume" />
+        <sequenceFlow sourceRef="storeResume" targetRef="phoneInterview"/>
+
+        <sequenceFlow sourceRef="phoneInterview" targetRef="EGW1"/>
+        <sequenceFlow sourceRef="EGW1" targetRef="sendRejectionEmail">
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${ !telephoneInterviewOutcome }]]>
+            </conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow sourceRef="sendRejectionEmail" targetRef="theEndEvent"/>
+
+        <sequenceFlow sourceRef="EGW1" targetRef="SP">
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${telephoneInterviewOutcome}]]>
+            </conditionExpression>
+        </sequenceFlow>
+
+        <exclusiveGateway id="defaultEGW" default="rejectedEvent"/>
+
+        <sequenceFlow sourceRef="SP" targetRef="defaultEGW"/>
+        <sequenceFlow sourceRef="defaultEGW" targetRef="rejectedEvent"/>
+        <sequenceFlow sourceRef="defaultEGW" targetRef="sendWelcomEmail">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${techOk && financialOk}]]></conditionExpression>
+        </sequenceFlow>
+
+        <sequenceFlow sourceRef="sendWelcomEmail" targetRef="acceptedEvent"/>
+
+    </process>
+
+</definitions>

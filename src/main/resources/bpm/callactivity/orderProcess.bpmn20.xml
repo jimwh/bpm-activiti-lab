@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions id="definitions"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             targetNamespace="orderProcess">
+
+    <process id="orderProcess" name="Order process with call activity">
+
+        <startEvent id="theStart"/>
+        <manualTask id="receiveOrder" name="Receive Order"/>
+        <callActivity id="callCheckCreditProcess" name="Check credit" calledElement="checkCreditProcess"/>
+        <userTask id="prepareAndShipTask" name="Prepare and Ship"/>
+        <endEvent id="theEnd"/>
+
+        <sequenceFlow sourceRef="theStart" targetRef="receiveOrder"/>
+        <sequenceFlow sourceRef="receiveOrder" targetRef="callCheckCreditProcess"/>
+        <sequenceFlow sourceRef="callCheckCreditProcess" targetRef="prepareAndShipTask"/>
+        <sequenceFlow sourceRef="prepareAndShipTask" targetRef="theEnd"/>
+
+    </process>
+
+
+</definitions>

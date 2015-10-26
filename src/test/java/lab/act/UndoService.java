@@ -3,18 +3,20 @@ package lab.act;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.Expression;
 import org.activiti.engine.delegate.JavaDelegate;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
 
 public class UndoService implements JavaDelegate {
 
-    @SuppressWarnings("unused")
-	private Expression counterName;
+    @Autowired
+    private Expression counterName;
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
 
         // alternative way to set
+        /*
         Set<String>set=execution.getVariableNames();
         if( set.isEmpty() ) {
             execution.setVariable("undoBookHotel", 1);
@@ -34,19 +36,18 @@ public class UndoService implements JavaDelegate {
                 }
             }
         }
+        */
 
-        /*
+
         String variableName = counterName.getValue(execution).toString();
-        log.info("variableName={}", variableName);
         Object variable = execution.getVariable(variableName);
         if (variable == null) {
-            log.info("var is null");
             execution.setVariable(variableName, 1);
         } else {
-            log.info("var is not null");
-            execution.setVariable(variableName, ((Integer) variable) + 1);
+            if(variable instanceof Integer)
+                execution.setVariable(variableName, ((Integer)variable) + 1);
         }
-        */
+
 
     }
 

@@ -1,5 +1,6 @@
 package lab.act.testconf;
 
+import lab.act.service.DevHireService;
 import org.activiti.engine.*;
 import org.activiti.engine.test.ActivitiRule;
 import org.activiti.spring.SpringProcessEngineConfiguration;
@@ -21,6 +22,12 @@ import java.util.Set;
 @ContextConfiguration
 public class ActivitiConfig {
     private static final Logger log = LoggerFactory.getLogger(ActivitiConfig.class);
+
+    @Bean
+    public DevHireService devHireService() {
+        log.info("devHireService");
+        return new DevHireService();
+    }
 
     @Bean
     @Primary

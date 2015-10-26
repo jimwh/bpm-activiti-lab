@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions id="definitions"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             targetNamespace="checkCreditProcess">
+
+    <process id="checkCreditProcess">
+
+        <startEvent id="theStart"/>
+        <userTask id="verifyCreditHistoryTask" name="Verify credit history"/>
+        <exclusiveGateway id="approvalDecision"/>
+        <userTask id="contactCustomerTask" name="Contact customer for further information"/>
+        <endEvent id="customerContactedEnd"/>
+        <endEvent id="normalEnd"/>
+
+        <sequenceFlow sourceRef="theStart" targetRef="verifyCreditHistoryTask"/>
+
+        <sequenceFlow sourceRef="verifyCreditHistoryTask" targetRef="approvalDecision"/>
+
+        <sequenceFlow sourceRef="approvalDecision" targetRef="contactCustomerTask">
+            <conditionExpression><![CDATA[${!creditApproved}]]></conditionExpression>
+        </sequenceFlow>
+
+        <sequenceFlow sourceRef="approvalDecision" targetRef="normalEnd">
+            <conditionExpression><![CDATA[${creditApproved}]]></conditionExpression>
+        </sequenceFlow>
+
+        <sequenceFlow sourceRef="contactCustomerTask" targetRef="customerContactedEnd"/>
+
+    </process>
+
+</definitions>
