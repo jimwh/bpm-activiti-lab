@@ -21,9 +21,9 @@
             </documentation>
         </userTask>
 
-        <exclusiveGateway id="EGW1"/>
+        <exclusiveGateway id="EGW1" name="exclusive gateway 1"/>
 
-        <endEvent id="theEndEvent"/>
+        <endEvent id="theEndEvent" name="the end event"/>
 
         <serviceTask id="sendRejectionEmail"
                      name="Send rejection email"
@@ -35,21 +35,21 @@
                      name="Send welcome mail"
                      activiti:expression="${devHireService.sendWelcomeEmail()}" />
 
-        <startEvent id="theStart" />
+        <startEvent id="theStart" name="the start event"/>
         <endEvent id="applicationCancelled"/>
         <endEvent id="acceptedEvent" name="accepted"/>
 
         <subProcess id="SP" name="subProcess">
-            <startEvent id="startSP"/>
-            <parallelGateway id="PGW1"/>
+            <startEvent id="startSP" name="start sub process event"/>
+            <parallelGateway id="PGW1" name="parallel gateway 1"/>
             <userTask id="techInterview"
                       name="Tech interview"
                       activiti:candidateGroups="dev-management"/>
             <userTask id="financialNegotiation"
                       name="Financial negotiation"
                       activiti:candidateGroups="finance"/>
-            <parallelGateway id="PGW2"/>
-            <endEvent id="endSP"/>
+            <parallelGateway id="PGW2" name="parallel gateway 2"/>
+            <endEvent id="endSP" name="end subprocess event"/>
             <sequenceFlow sourceRef="startSP" targetRef="PGW1"/>
             <sequenceFlow sourceRef="PGW1" targetRef="techInterview"/>
             <sequenceFlow sourceRef="PGW1" targetRef="financialNegotiation"/>

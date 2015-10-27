@@ -28,6 +28,33 @@ public class DevHiringTest extends UnitTestAccessor {
 
     @Test
     @Deployment(resources = {"DeveloperHiring.bpmn20.xml"})
+    public void testPhoneInterviewOk() {
+        String procDefKey = "hireProcess";
+        String bizKey = "bob";
+        Map<String, Object>map = new HashMap<String, Object>();
+        map.put("devHireService", devHireService);
+        startProcessInstanceByKey(procDefKey, bizKey, map);
+        Assert.assertEquals(1, taskCount(bizKey));
+        Task task = getTask(bizKey, "phoneInterview");
+        taskService.setVariable(task.getId(), "telephoneInterviewOutcome", true);
+        completeTask(bizKey, "phoneInterview");
+        //
+        Assert.assertEquals(2, taskCount(bizKey));
+        //
+        Task task1 = getTask(bizKey, "techInterview");
+        Assert.assertNotNull(task1);
+        Task task2 = getTask(bizKey, "financialNegotiation");
+        Assert.assertNotNull(task2);
+        //
+        taskService.setVariable(task1.getId(), "techOK", true);
+        completeTask(bizKey, "techInterview");
+        taskService.setVariable(task2.getId(), "financialOk", true);
+        completeTask(bizKey, "financialNegotiation");
+        Assert.assertEquals(0, taskCount(bizKey));
+        //
+        printTaskHistory(procDefKey, bizKey);
+        printActivityHistory(procDefKey, bizKey);
+    }
 
     public void testPhoneInterview() {
         String procDefKey = "hireProcess";
@@ -37,7 +64,7 @@ public class DevHiringTest extends UnitTestAccessor {
         startProcessInstanceByKey(procDefKey, bizKey, map);
         Assert.assertEquals(1, taskCount(bizKey));
         Task task = getTask(bizKey, "phoneInterview");
-        taskService.setVariable(task.getId(), "telephoneInterviewOutcome", "false");
+        taskService.setVariable(task.getId(), "telephoneInterviewOutcome", false);
         completeTask(bizKey, "phoneInterview");
         Assert.assertEquals(0, taskCount(bizKey));
     }
