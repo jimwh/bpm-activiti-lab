@@ -31,7 +31,7 @@
 
         <endEvent id="rejectedEvent" name="rejected" />
 
-        <serviceTask id="sendWelcomEmail"
+        <serviceTask id="sendWelcomeEmail"
                      name="Send welcome mail"
                      activiti:expression="${devHireService.sendWelcomeEmail()}" />
 
@@ -82,15 +82,16 @@
             </conditionExpression>
         </sequenceFlow>
 
-        <exclusiveGateway id="defaultEGW" default="rejectedEvent"/>
+        <exclusiveGateway id="defaultEGW" default="rejectedEvent" name="default exclusive gateway"/>
 
         <sequenceFlow sourceRef="SP" targetRef="defaultEGW"/>
-        <sequenceFlow sourceRef="defaultEGW" targetRef="rejectedEvent"/>
-        <sequenceFlow sourceRef="defaultEGW" targetRef="sendWelcomEmail">
-            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${techOk && financialOk}]]></conditionExpression>
+        <!-- when using default, it is order sensitive, first with condition, then default go not satisfy condition -->
+        <sequenceFlow sourceRef="defaultEGW" targetRef="sendWelcomeEmail">
+            <conditionExpression xsi:type="tFormalExpression">${techOK and financialOK}</conditionExpression>
         </sequenceFlow>
+        <sequenceFlow sourceRef="defaultEGW" targetRef="rejectedEvent"/>
 
-        <sequenceFlow sourceRef="sendWelcomEmail" targetRef="acceptedEvent"/>
+        <sequenceFlow sourceRef="sendWelcomeEmail" targetRef="acceptedEvent"/>
 
     </process>
 

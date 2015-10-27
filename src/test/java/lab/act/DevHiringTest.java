@@ -48,7 +48,7 @@ public class DevHiringTest extends UnitTestAccessor {
         //
         taskService.setVariable(task1.getId(), "techOK", true);
         completeTask(bizKey, "techInterview");
-        taskService.setVariable(task2.getId(), "financialOk", true);
+        taskService.setVariable(task2.getId(), "financialOK", true);
         completeTask(bizKey, "financialNegotiation");
         Assert.assertEquals(0, taskCount(bizKey));
         //
