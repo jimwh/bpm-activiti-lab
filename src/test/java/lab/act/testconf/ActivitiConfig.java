@@ -35,7 +35,7 @@ public class ActivitiConfig {
         log.info("datasource first...");
         return DataSourceBuilder.create()
                 .driverClassName("org.h2.Driver")
-                .url("jdbc:h2:mem:activiti;DB_CLOSE_DELAY=1000")
+                .url("jdbc:h2:mem:activiti;DB_CLOSE_DELAY=1000;DB_CLOSE_ON_EXIT=FALSE")
                 .username("sa")
                 .password("")
                 .build();

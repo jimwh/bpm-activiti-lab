@@ -89,7 +89,7 @@ public class UnitTestAccessor {
         List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery()
                 .processDefinitionKey(procDefKey)
                 .processInstanceBusinessKey(bizKey)
-                .finished()
+                //.finished()
                 .orderByHistoricTaskInstanceEndTime()
                 .desc()
                 .list();
