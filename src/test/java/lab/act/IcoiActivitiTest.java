@@ -26,20 +26,20 @@ public class IcoiActivitiTest extends UnitTestAccessor {
         //
         testAutoDeactivate(procDefKey);
         try {
-            Thread.sleep(5000);
+            Thread.sleep(15000);
         } catch (InterruptedException e) {
         }
-        //Assert.assertEquals(0, taskCount("testAutoDeactivate"));
+        Assert.assertEquals(0, taskCount("testAutoDeactivate"));
         printTaskHistory(procDefKey, "testAutoDeactivate");
-/*
+
         testReActivate(procDefKey);
         try {
-            Thread.sleep(5000);
+            Thread.sleep(15000);
         } catch (InterruptedException e) {
         }
         Assert.assertEquals(0, taskCount("testReActivate"));
         printTaskHistory(procDefKey, "testReActivate");
-*/
+
     }
 
     void testAutoDeactivate(String processDefKey) {

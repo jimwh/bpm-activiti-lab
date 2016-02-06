@@ -14,11 +14,13 @@ public class ActEvtListener implements ActivitiEventListener {
 
     @Override
     public void onEvent(ActivitiEvent activitiEvent) {
+        /*
         log.info("executionId={}, processDefId={}, prcInstId={}, name={}",
                 activitiEvent.getExecutionId(),
                 activitiEvent.getProcessDefinitionId(),
                 activitiEvent.getProcessInstanceId(),
                 activitiEvent.getType().name());
+        */
     }
 
     @Override
