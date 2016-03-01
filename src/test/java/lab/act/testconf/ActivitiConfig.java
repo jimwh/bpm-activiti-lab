@@ -53,7 +53,7 @@ public class ActivitiConfig {
 
     @Bean
     public ProcessEngine processEngine() {
-        SpringProcessEngineConfiguration config = new SpringProcessEngineConfiguration();
+        final SpringProcessEngineConfiguration config = new SpringProcessEngineConfiguration();
         config.setDataSource(transactionAwareDataSource());
         config.setTransactionManager(transactionManager());
         config.setProcessEngineName("ACTIVITI-LAB-BPM-ENGINE");
@@ -62,7 +62,7 @@ public class ActivitiConfig {
         config.setJobExecutorActivate(true);
         config.setAsyncExecutorActivate(true);
         config.setHistory("full");
-        Set<Class<?>> set = new HashSet<Class<?>>();
+        final Set<Class<?>> set = new HashSet<Class<?>>();
         set.add(lab.act.service.LabMybatisMapper.class);
         config.setCustomMybatisMappers(set);
         return config.buildProcessEngine();
