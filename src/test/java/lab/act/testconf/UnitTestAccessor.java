@@ -40,17 +40,17 @@ public class UnitTestAccessor {
     @Autowired
     public HistoryService historyService;
 
-    public void startProcessInstanceByKey(String procDefKey, String bizKey) {
+    public void startProcessInstanceByKey(final String procDefKey, final String bizKey) {
         ProcessInstance instance = runtimeService.startProcessInstanceByKey(procDefKey, bizKey);
         Assert.assertNotNull(instance);
     }
 
-    public void startProcessInstanceByKey(String procDefKey, String bizKey, Map<String, Object> map) {
+    public void startProcessInstanceByKey(final String procDefKey, final String bizKey, final Map<String, Object> map) {
         ProcessInstance instance = runtimeService.startProcessInstanceByKey(procDefKey, bizKey, map);
         Assert.assertNotNull(instance);
     }
 
-    public void completeTask(String bizKey, String taskDefKey) {
+    public void completeTask(final String bizKey, final String taskDefKey) {
         Task task = taskService.createTaskQuery()
                 .processInstanceBusinessKey(bizKey)
                 .taskDefinitionKey(taskDefKey)
@@ -59,7 +59,9 @@ public class UnitTestAccessor {
         taskService.complete(task.getId());
     }
 
-    public void completeTask(String bizKey, String taskDefKey, Map<String, Object> taskVariable) {
+    public void completeTask(final String bizKey,
+                             final String taskDefKey,
+                             final Map<String, Object> taskVariable) {
         Task task = taskService.createTaskQuery()
                 .processInstanceBusinessKey(bizKey)
                 .taskDefinitionKey(taskDefKey)
@@ -68,7 +70,7 @@ public class UnitTestAccessor {
         taskService.complete(task.getId(), taskVariable);
     }
 
-    public long taskCount(String bizKey) {
+    public long taskCount(final String bizKey) {
         return taskService
                 .createTaskQuery()
                 .processInstanceBusinessKey(bizKey).count();
@@ -85,7 +87,7 @@ public class UnitTestAccessor {
         }
     }
 
-    public void printTaskHistory(String procDefKey, String bizKey) {
+    public void printTaskHistory(final String procDefKey, final String bizKey) {
         List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery()
                 .processDefinitionKey(procDefKey)
                 .processInstanceBusinessKey(bizKey)
@@ -97,15 +99,15 @@ public class UnitTestAccessor {
         }
     }
 
-    public Task getTask(String bizKey, String taskDefKey) {
+    public Task getTask(final String bizKey, final String taskDefKey) {
         return taskService.createTaskQuery()
                 .processInstanceBusinessKey(bizKey)
                 .taskDefinitionKey(taskDefKey)
                 .singleResult();
     }
 
-    public void printActivityHistory(String procDefKey, String bizKey) {
-        List<HistoricProcessInstance> historicProcessInstanceList = historyService.createHistoricProcessInstanceQuery()
+    public void printActivityHistory(final String procDefKey, final String bizKey) {
+        List<HistoricProcessInstance> hpiList = historyService.createHistoricProcessInstanceQuery()
                 .notDeleted()
                 .processDefinitionKey(procDefKey)
                 .processInstanceBusinessKey(bizKey)
@@ -113,7 +115,7 @@ public class UnitTestAccessor {
                 .desc()
                 .list();
 
-        HistoricProcessInstance hp = historicProcessInstanceList.get(0);
+        HistoricProcessInstance hp = hpiList.get(0);
 
         List<HistoricActivityInstance> list =
                 historyService.createHistoricActivityInstanceQuery()
@@ -130,8 +132,8 @@ public class UnitTestAccessor {
         }
     }
 
-    public ProcessInstance getProcessInstance(String procKey, String bizKey) {
-        List<ProcessInstance> list = runtimeService.createProcessInstanceQuery()
+    public ProcessInstance getProcessInstance(final String procKey, final String bizKey) {
+        final List<ProcessInstance> list = runtimeService.createProcessInstanceQuery()
                 .active()
                 .includeProcessVariables()
                 .processDefinitionKey(procKey)
@@ -142,7 +144,7 @@ public class UnitTestAccessor {
         return list.isEmpty() ? null : list.get(0);
     }
 
-    public boolean hasProcess(String processId) {
+    public boolean hasProcess(final String processId) {
         return runtimeService.createProcessInstanceQuery()
                 .processInstanceId(processId)
                 .active()
