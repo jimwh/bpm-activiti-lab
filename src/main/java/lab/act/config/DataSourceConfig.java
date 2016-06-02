@@ -23,13 +23,13 @@ public class DataSourceConfig {
     @Bean
     @Primary
     public DataSource primaryDataSource() throws SQLException {
-        OracleDataSource dataSource = new OracleDataSource();
+        final OracleDataSource dataSource = new OracleDataSource();
         dataSource.setURL(env.getProperty("primary.url"));
         dataSource.setUser(env.getProperty("primary.username"));
         dataSource.setPassword(env.getProperty("primary.password"));
         dataSource.setImplicitCachingEnabled(true);
         dataSource.setFastConnectionFailoverEnabled(true);
-        Properties properties = new Properties();
+        final Properties properties = new Properties();
         properties.setProperty("MinLimit", "1");
         properties.setProperty("MaxLimit", "8");
         properties.setProperty("InitialLimit", "1");
